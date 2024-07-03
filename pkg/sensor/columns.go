@@ -22,6 +22,6 @@ var DefaultColumnMap map[string]string
 func init() {
 	DefaultColumnMap = make(map[string]string)
 	for _, column := range DefaultColumns {
-		DefaultColumnMap[column] = DefaultColumnMap[column]
+		DefaultColumnMap[column] = column
 	}
 }
