@@ -109,3 +109,25 @@ func CollectFields(columns map[string]string, fields sensor.Fields, f func(colum
 		}
 	}
 }
+
+// Transform creates a map with the values copied from the given sensor.Data, using the provided column names as map keys.
+//
+// Any values that are not included in the given column map are not included in the returned map.
+func Transform(columns map[string]string, data sensor.Data) map[string]any {
+	values := make(map[string]any)
+	Collect(columns, data, func(column string, v any) {
+		values[column] = v
+	})
+	return values
+}
+
+// TransformFields creates a map with the values copied from the given sensor.Fields, using the provided column names as map keys.
+//
+// Any fields that have a nil value or are not included in the given column map are not included in the returned map.
+func TransformFields(columns map[string]string, fields sensor.Fields) map[string]any {
+	values := make(map[string]any)
+	CollectFields(columns, fields, func(column string, v any) {
+		values[column] = v
+	})
+	return values
+}

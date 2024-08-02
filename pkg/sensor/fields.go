@@ -107,3 +107,40 @@ func NonZeroFields(d Data) Fields {
 	}
 	return f
 }
+
+func FieldsFromColumns(d Data, columns []string) Fields {
+	var f Fields
+	for _, c := range columns {
+		switch c {
+		case "time":
+			f.Timestamp = d.Timestamp
+		case "mac":
+			f.Addr = &d.Addr
+		case "name":
+			f.Name = &d.Name
+		case "temperature":
+			f.Temperature = &d.Temperature
+		case "humidity":
+			f.Humidity = &d.Humidity
+		case "pressure":
+			f.Pressure = &d.Pressure
+		case "acceleration_x":
+			f.AccelerationX = &d.AccelerationX
+		case "acceleration_y":
+			f.AccelerationY = &d.AccelerationY
+		case "acceleration_z":
+			f.AccelerationZ = &d.AccelerationZ
+		case "movement_counter":
+			f.MovementCounter = &d.MovementCounter
+		case "measurement_number":
+			f.MeasurementNumber = &d.MeasurementNumber
+		case "dew_point":
+			f.DewPoint = &d.DewPoint
+		case "battery_voltage":
+			f.BatteryVoltage = &d.BatteryVoltage
+		case "tx_power":
+			f.TxPower = &d.TxPower
+		}
+	}
+	return f
+}
