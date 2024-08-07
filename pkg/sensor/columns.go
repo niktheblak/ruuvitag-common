@@ -1,5 +1,11 @@
 package sensor
 
+import (
+	"errors"
+	"fmt"
+)
+
+// DefaultColumns names of fields contained in a RuuviTag v5 protocol transmission.
 var DefaultColumns = []string{
 	"time",
 	"mac",
@@ -17,6 +23,12 @@ var DefaultColumns = []string{
 	"tx_power",
 }
 
+var (
+	ErrInvalidColumn = errors.New("invalid column")
+	ErrMissingColumn = errors.New("missing mandatory column")
+)
+
+// DefaultColumnMap column mapping where each column has the default name.
 var DefaultColumnMap map[string]string
 
 func init() {
@@ -24,4 +36,64 @@ func init() {
 	for _, column := range DefaultColumns {
 		DefaultColumnMap[column] = column
 	}
+}
+
+// ValidateColumnMapping validates that a given custom column mapping contains necessary fields to look up RuuviTag data.
+func ValidateColumnMapping(columns map[string]string) error {
+	if len(columns) == 0 {
+		return fmt.Errorf("columns cannot be empty")
+	}
+	_, ok := columns["time"]
+	if !ok {
+		return fmt.Errorf("%w: time", ErrMissingColumn)
+	}
+	_, nameOK := columns["name"]
+	_, macOK := columns["mac"]
+	if !nameOK && !macOK {
+		return fmt.Errorf("%w: name or mac", ErrMissingColumn)
+	}
+	for cn := range columns {
+		_, ok := DefaultColumnMap[cn]
+		if !ok {
+			return fmt.Errorf("%w: %s", ErrInvalidColumn, cn)
+		}
+	}
+	return nil
+}
+
+// ValidateRequestedColumns validates that given requested columns conform to given custom column mapping.
+//
+// The custom column mapping is expected to be validated with ValidateColumnMapping prior to calling this function.
+func ValidateRequestedColumns(columns map[string]string, requested []string) error {
+	timeOK := false
+	nameOK := false
+	macOK := false
+	for _, c := range requested {
+		columnOK := false
+		for _, dc := range columns {
+			if dc == c {
+				columnOK = true
+				break
+			}
+		}
+		if !columnOK {
+			return fmt.Errorf("%w: %s", ErrInvalidColumn, c)
+		}
+		if c == columns["time"] {
+			timeOK = true
+		}
+		if c == columns["name"] {
+			nameOK = true
+		}
+		if c == columns["mac"] {
+			macOK = true
+		}
+	}
+	if !timeOK {
+		return fmt.Errorf("%w: %s", ErrMissingColumn, columns["time"])
+	}
+	if !nameOK && !macOK {
+		return fmt.Errorf("%w: %s or %s", ErrMissingColumn, columns["name"], columns["mac"])
+	}
+	return nil
 }
