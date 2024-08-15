@@ -3,6 +3,8 @@ package sensor
 import (
 	"errors"
 	"fmt"
+	"maps"
+	"slices"
 )
 
 // DefaultColumns names of fields contained in a RuuviTag v5 protocol transmission.
@@ -68,15 +70,9 @@ func ValidateRequestedColumns(columns map[string]string, requested []string) err
 	timeOK := false
 	nameOK := false
 	macOK := false
+	columnNames := slices.Collect(maps.Values(columns))
 	for _, c := range requested {
-		columnOK := false
-		for _, dc := range columns {
-			if dc == c {
-				columnOK = true
-				break
-			}
-		}
-		if !columnOK {
+		if !slices.Contains(columnNames, c) {
 			return fmt.Errorf("%w: %s", ErrInvalidColumn, c)
 		}
 		if c == columns["time"] {
