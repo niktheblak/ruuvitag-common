@@ -43,8 +43,8 @@ func BuildInsertQuery(table string, columns map[string]string) (string, error) {
 
 func BuildQueryArguments(columns map[string]string, data sensor.Data) []any {
 	var args []any
-	columnmap.Collect(columns, data, func(_ string, v any) {
+	for _, v := range columnmap.Collect(columns, data) {
 		args = append(args, v)
-	})
+	}
 	return args
 }

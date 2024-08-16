@@ -31,9 +31,9 @@ var testColumns = map[string]string{
 
 func TestCollect(t *testing.T) {
 	values := make(map[string]any)
-	Collect(testColumns, testData, func(column string, v any) {
+	for column, v := range Collect(testColumns, testData) {
 		values[column] = v
-	})
+	}
 	assert.Equal(t, testData.Timestamp, values["ts"])
 	assert.Equal(t, testData.Name, values["name"])
 	assert.Equal(t, testData.Addr, values["addr"])
@@ -46,9 +46,9 @@ func TestCollect(t *testing.T) {
 func TestCollectFields(t *testing.T) {
 	fields := sensor.FromData(testData)
 	values := make(map[string]any)
-	CollectFields(testColumns, fields, func(column string, v any) {
+	for column, v := range CollectFields(testColumns, fields) {
 		values[column] = v
-	})
+	}
 	assert.Equal(t, testData.Timestamp, values["ts"])
 	assert.Equal(t, testData.Name, values["name"])
 	assert.Equal(t, testData.Addr, values["addr"])
