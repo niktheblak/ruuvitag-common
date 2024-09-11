@@ -6,8 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
+	"github.com/spf13/cast"
 )
 
 var (
@@ -19,17 +18,17 @@ func RemovePassword(connString string) string {
 	return passwordRegexp.ReplaceAllString(connString, "password=[redacted] ")
 }
 
-func CreateConnString(vpr *viper.Viper, prefix string) (connString string, err error) {
+func CreateConnString(cfg map[string]any) (connString string, err error) {
 	var (
-		host     = vpr.GetString(fmt.Sprintf("%s.host", prefix))
-		port     = vpr.GetInt(fmt.Sprintf("%s.port", prefix))
-		username = vpr.GetString(fmt.Sprintf("%s.username", prefix))
-		password = vpr.GetString(fmt.Sprintf("%s.password", prefix))
-		database = vpr.GetString(fmt.Sprintf("%s.database", prefix))
-		table    = vpr.GetString(fmt.Sprintf("%s.table", prefix))
-		sslmode  = vpr.GetString(fmt.Sprintf("%s.sslmode", prefix))
-		sslcert  = vpr.GetString(fmt.Sprintf("%s.sslcert", prefix))
-		sslkey   = vpr.GetString(fmt.Sprintf("%s.sslkey", prefix))
+		host     = cast.ToString(cfg["host"])
+		port     = cast.ToInt(cfg["port"])
+		username = cast.ToString(cfg["username"])
+		password = cast.ToString(cfg["password"])
+		database = cast.ToString(cfg["database"])
+		table    = cast.ToString(cfg["table"])
+		sslmode  = cast.ToString(cfg["sslmode"])
+		sslcert  = cast.ToString(cfg["sslcert"])
+		sslkey   = cast.ToString(cfg["sslkey"])
 	)
 	if host == "" {
 		err = fmt.Errorf("PostgreSQL host must be specified")
@@ -78,23 +77,4 @@ func CreateConnString(vpr *viper.Viper, prefix string) (connString string, err e
 	}
 	connString = builder.String()
 	return
-}
-
-func AddFlags(fs *pflag.FlagSet, vpr *viper.Viper, prefix string) {
-	fs.String(fmt.Sprintf("%s.host", prefix), "", "database host or IP")
-	fs.Int(fmt.Sprintf("%s.port", prefix), 0, "database port")
-	fs.String(fmt.Sprintf("%s.username", prefix), "", "database username")
-	fs.String(fmt.Sprintf("%s.password", prefix), "", "database password")
-	fs.String(fmt.Sprintf("%s.database", prefix), "", "database name")
-	fs.String(fmt.Sprintf("%s.table", prefix), "", "table name")
-	fs.String(fmt.Sprintf("%s.sslmode", prefix), "", "SSL mode")
-	fs.String(fmt.Sprintf("%s.sslcert", prefix), "", "path to SSL certificate file")
-	fs.String(fmt.Sprintf("%s.sslkey", prefix), "", "path to SSL key file")
-	fs.String(fmt.Sprintf("%s.column.time", prefix), "", "time column name")
-	fs.String(fmt.Sprintf("%s.type", prefix), "", "database type, postgres or timescaledb")
-
-	vpr.SetDefault(fmt.Sprintf("%s.port", prefix), "5432")
-	vpr.SetDefault(fmt.Sprintf("%s.sslmode", prefix), "disable")
-	vpr.SetDefault(fmt.Sprintf("%s.column.time", prefix), "time")
-	vpr.SetDefault(fmt.Sprintf("%s.type", prefix), "postgres")
 }

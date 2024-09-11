@@ -4,8 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -37,15 +35,16 @@ func TestRemovePassword(t *testing.T) {
 	)
 }
 
-func TestCreatePsqlInfoString(t *testing.T) {
-	vpr := viper.New()
-	vpr.Set("postgres.host", "localhost")
-	vpr.Set("postgres.port", "5432")
-	vpr.Set("postgres.username", "test_user")
-	vpr.Set("postgres.password", "t4st_p4s!$")
-	vpr.Set("postgres.database", "test_database")
-	vpr.Set("postgres.table", "test_table")
-	psqlInfo, err := CreateConnString(vpr, "postgres")
+func TestCreateConnString(t *testing.T) {
+	cfg := map[string]any{
+		"host":     "localhost",
+		"port":     5432,
+		"username": "test_user",
+		"password": "t4st_p4s!$",
+		"database": "test_database",
+		"table":    "test_table",
+	}
+	psqlInfo, err := CreateConnString(cfg)
 	require.NoError(t, err)
 	assert.Equal(
 		t,
@@ -53,33 +52,9 @@ func TestCreatePsqlInfoString(t *testing.T) {
 		psqlInfo,
 	)
 
-	vpr.Set("postgres.table", "")
-	_, err = CreateConnString(vpr, "postgres")
+	delete(cfg, "table")
+	_, err = CreateConnString(cfg)
 	assert.ErrorContains(t, err, "table name must be specified")
-}
-
-func TestAddPsqlFlags(t *testing.T) {
-	fs := pflag.NewFlagSet("test", pflag.ContinueOnError)
-	vpr := viper.New()
-	vpr.Set("postgres.host", "localhost")
-	vpr.Set("postgres.port", "5432")
-	vpr.Set("postgres.username", "test_user")
-	vpr.Set("postgres.password", "t4st_p4s!$")
-	vpr.Set("postgres.database", "test_database")
-	vpr.Set("postgres.table", "test_table")
-	AddFlags(fs, vpr, "postgres")
-	f := fs.Lookup("postgres.host")
-	require.NotNil(t, f)
-	f = fs.Lookup("postgres.port")
-	require.NotNil(t, f)
-	f = fs.Lookup("postgres.username")
-	require.NotNil(t, f)
-	f = fs.Lookup("postgres.password")
-	require.NotNil(t, f)
-	f = fs.Lookup("postgres.database")
-	require.NotNil(t, f)
-	f = fs.Lookup("postgres.table")
-	require.NotNil(t, f)
 }
 
 func TestDefaultBuildInsertQuery(t *testing.T) {
