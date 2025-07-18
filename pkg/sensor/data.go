@@ -12,6 +12,7 @@ type Data struct {
 	Temperature       float64   `json:"temperature"`
 	Humidity          float64   `json:"humidity"`
 	DewPoint          float64   `json:"dew_point"`
+	WetBulb           float64   `json:"wet_bulb"`
 	Pressure          float64   `json:"pressure"`
 	BatteryVoltage    float64   `json:"battery_voltage"`
 	TxPower           int       `json:"tx_power"`
@@ -40,6 +41,9 @@ func FromFields(f Fields) Data {
 	}
 	if f.DewPoint != nil {
 		d.DewPoint = *f.DewPoint
+	}
+	if f.WetBulb != nil {
+		d.WetBulb = *f.WetBulb
 	}
 	if f.Pressure != nil {
 		d.Pressure = *f.Pressure

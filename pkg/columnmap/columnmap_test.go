@@ -4,9 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/niktheblak/ruuvitag-common/pkg/sensor"
+	"github.com/stretchr/testify/assert"
 )
 
 var testData = sensor.Data{

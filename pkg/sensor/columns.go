@@ -23,6 +23,7 @@ var DefaultColumns = []string{
 	"dew_point",
 	"battery_voltage",
 	"tx_power",
+	"wet_bulb",
 }
 
 var (

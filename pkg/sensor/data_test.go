@@ -13,6 +13,7 @@ var testFields = Fields{
 	Temperature: Float64Pointer(22.5),
 	Humidity:    Float64Pointer(46),
 	DewPoint:    Float64Pointer(12.1),
+	WetBulb:     Float64Pointer(21.5),
 	Pressure:    Float64Pointer(1002),
 	Timestamp:   time.Date(2024, time.July, 3, 10, 24, 23, 213, time.UTC),
 }
@@ -26,6 +27,7 @@ func TestFromFields(t *testing.T) {
 	assert.Equal(t, testData.Humidity, data.Humidity)
 	assert.Equal(t, testData.Pressure, data.Pressure)
 	assert.Equal(t, testData.DewPoint, data.DewPoint)
+	assert.Equal(t, testData.WetBulb, data.WetBulb)
 	assert.Equal(t, 0.0, data.BatteryVoltage)
 	assert.Equal(t, 0, data.TxPower)
 	assert.Equal(t, 0, data.MeasurementNumber)

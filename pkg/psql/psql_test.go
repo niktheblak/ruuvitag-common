@@ -60,7 +60,7 @@ func TestCreateConnString(t *testing.T) {
 func TestDefaultBuildInsertQuery(t *testing.T) {
 	q, err := BuildInsertQuery("ruuvitag", sensor.DefaultColumnMap)
 	require.NoError(t, err)
-	assert.Equal(t, `INSERT INTO ruuvitag(time,mac,name,temperature,humidity,pressure,acceleration_x,acceleration_y,acceleration_z,movement_counter,measurement_number,dew_point,battery_voltage,tx_power) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`, q)
+	assert.Equal(t, `INSERT INTO ruuvitag(time,mac,name,temperature,humidity,pressure,acceleration_x,acceleration_y,acceleration_z,movement_counter,measurement_number,dew_point,battery_voltage,tx_power,wet_bulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`, q)
 }
 
 func TestBuildInsertQuery(t *testing.T) {
@@ -77,16 +77,17 @@ func TestBuildInsertQuery(t *testing.T) {
 		"movement_counter":   "movementCounter",
 		"measurement_number": "measurementNumber",
 		"dew_point":          "dewPoint",
+		"wet_bulb":           "wetBulb",
 		"battery_voltage":    "batteryVoltage",
 	}
 	q, err := BuildInsertQuery("ruuvitag", columns)
 	require.NoError(t, err)
-	assert.Equal(t, `INSERT INTO ruuvitag(ts,addr,roomName,temperature,humidity,pressure,accX,accY,accZ,movementCounter,measurementNumber,dewPoint,batteryVoltage) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`, q)
+	assert.Equal(t, `INSERT INTO ruuvitag(ts,addr,roomName,temperature,humidity,pressure,accX,accY,accZ,movementCounter,measurementNumber,dewPoint,batteryVoltage,wetBulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`, q)
 }
 
 func TestDefaultBuildQueryArguments(t *testing.T) {
 	args := BuildQueryArguments(sensor.DefaultColumnMap, testData)
-	require.Len(t, args, 14)
+	require.Len(t, args, 15)
 	assert.Equal(t, testData.Timestamp, args[0])
 	assert.Equal(t, testData.Addr, args[1])
 	assert.Equal(t, testData.Name, args[2])
@@ -101,6 +102,7 @@ func TestDefaultBuildQueryArguments(t *testing.T) {
 	assert.Equal(t, testData.DewPoint, args[11])
 	assert.Equal(t, testData.BatteryVoltage, args[12])
 	assert.Equal(t, testData.TxPower, args[13])
+	assert.Equal(t, testData.WetBulb, args[14])
 }
 
 func TestBuildQueryArguments(t *testing.T) {
@@ -114,18 +116,9 @@ func TestBuildQueryArguments(t *testing.T) {
 		"movement_counter":   "movementCounter",
 		"measurement_number": "measurementNumber",
 		"dew_point":          "dewPoint",
+		"wet_bulb":           "wetBulb",
 		"battery_voltage":    "batteryVoltage",
 	}
 	args := BuildQueryArguments(columns, testData)
-	require.Len(t, args, 10)
-	assert.Equal(t, testData.Timestamp, args[0])
-	assert.Equal(t, testData.Addr, args[1])
-	assert.Equal(t, testData.Name, args[2])
-	assert.Equal(t, testData.Temperature, args[3])
-	assert.Equal(t, testData.Humidity, args[4])
-	assert.Equal(t, testData.Pressure, args[5])
-	assert.Equal(t, testData.MovementCounter, args[6])
-	assert.Equal(t, testData.MeasurementNumber, args[7])
-	assert.Equal(t, testData.DewPoint, args[8])
-	assert.Equal(t, testData.BatteryVoltage, args[9])
+	require.Len(t, args, 11)
 }

@@ -13,6 +13,7 @@ type Fields struct {
 	Temperature       *float64  `json:"temperature,omitempty"`
 	Humidity          *float64  `json:"humidity,omitempty"`
 	DewPoint          *float64  `json:"dew_point,omitempty"`
+	WetBulb           *float64  `json:"wet_bulb,omitempty"`
 	Pressure          *float64  `json:"pressure,omitempty"`
 	BatteryVoltage    *float64  `json:"battery_voltage,omitempty"`
 	TxPower           *int      `json:"tx_power,omitempty"`
@@ -31,6 +32,7 @@ func AllZeroFields() Fields {
 		Temperature:       ZeroFloat64Pointer(),
 		Humidity:          ZeroFloat64Pointer(),
 		DewPoint:          ZeroFloat64Pointer(),
+		WetBulb:           ZeroFloat64Pointer(),
 		Pressure:          ZeroFloat64Pointer(),
 		BatteryVoltage:    ZeroFloat64Pointer(),
 		TxPower:           ZeroIntPointer(),
@@ -42,7 +44,7 @@ func AllZeroFields() Fields {
 	}
 }
 
-// FromData copies all values from given Data struct regardless of whether they have nonzero value or not.
+// FromData copies all values from the given Data struct regardless of whether they have nonzero value or not.
 func FromData(d Data) Fields {
 	return Fields{
 		Timestamp:         d.Timestamp,
@@ -51,6 +53,7 @@ func FromData(d Data) Fields {
 		Temperature:       &d.Temperature,
 		Humidity:          &d.Humidity,
 		DewPoint:          &d.DewPoint,
+		WetBulb:           &d.WetBulb,
 		Pressure:          &d.Pressure,
 		BatteryVoltage:    &d.BatteryVoltage,
 		TxPower:           &d.TxPower,
@@ -80,6 +83,9 @@ func NonZeroFields(d Data) Fields {
 	}
 	if d.DewPoint != 0 {
 		f.DewPoint = &d.DewPoint
+	}
+	if d.WetBulb != 0 {
+		f.WetBulb = &d.WetBulb
 	}
 	if d.Pressure != 0 {
 		f.Pressure = &d.Pressure
@@ -136,6 +142,8 @@ func FieldsFromColumns(d Data, columns []string) Fields {
 			f.MeasurementNumber = &d.MeasurementNumber
 		case "dew_point":
 			f.DewPoint = &d.DewPoint
+		case "wet_bulb":
+			f.WetBulb = &d.WetBulb
 		case "battery_voltage":
 			f.BatteryVoltage = &d.BatteryVoltage
 		case "tx_power":

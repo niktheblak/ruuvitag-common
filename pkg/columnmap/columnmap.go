@@ -40,6 +40,8 @@ func Collect(columns map[string]string, data sensor.Data) iter.Seq2[string, any]
 				v = data.MeasurementNumber
 			case "dew_point":
 				v = data.DewPoint
+			case "wet_bulb":
+				v = data.WetBulb
 			case "battery_voltage":
 				v = data.BatteryVoltage
 			case "tx_power":
@@ -110,6 +112,10 @@ func CollectFields(columns map[string]string, fields sensor.Fields) iter.Seq2[st
 			case "dew_point":
 				if fields.DewPoint != nil {
 					v = *fields.DewPoint
+				}
+			case "wet_bulb":
+				if fields.WetBulb != nil {
+					v = *fields.WetBulb
 				}
 			case "battery_voltage":
 				if fields.BatteryVoltage != nil {

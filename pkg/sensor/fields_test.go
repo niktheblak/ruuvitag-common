@@ -14,6 +14,7 @@ var testData = Data{
 	Temperature: 22.5,
 	Humidity:    46,
 	DewPoint:    12.1,
+	WetBulb:     21.5,
 	Pressure:    1002,
 	Timestamp:   time.Date(2024, time.July, 3, 10, 24, 23, 213, time.UTC),
 }
@@ -25,6 +26,7 @@ func TestAllZeroFields(t *testing.T) {
 	require.NotNil(t, fields.Temperature)
 	require.NotNil(t, fields.Humidity)
 	require.NotNil(t, fields.DewPoint)
+	require.NotNil(t, fields.WetBulb)
 	require.NotNil(t, fields.Pressure)
 	require.NotNil(t, fields.BatteryVoltage)
 	require.NotNil(t, fields.TxPower)
@@ -40,6 +42,7 @@ func TestAllZeroFields(t *testing.T) {
 	assert.Equal(t, 0.0, *fields.Humidity)
 	assert.Equal(t, 0.0, *fields.Pressure)
 	assert.Equal(t, 0.0, *fields.DewPoint)
+	assert.Equal(t, 0.0, *fields.WetBulb)
 	assert.Equal(t, 0.0, *fields.BatteryVoltage)
 	assert.Equal(t, 0, *fields.TxPower)
 	assert.Equal(t, 0, *fields.MeasurementNumber)
@@ -56,6 +59,7 @@ func TestFromData(t *testing.T) {
 	require.NotNil(t, fields.Temperature)
 	require.NotNil(t, fields.Humidity)
 	require.NotNil(t, fields.DewPoint)
+	require.NotNil(t, fields.WetBulb)
 	require.NotNil(t, fields.Pressure)
 	require.NotNil(t, fields.BatteryVoltage)
 	require.NotNil(t, fields.TxPower)
@@ -71,6 +75,7 @@ func TestFromData(t *testing.T) {
 	assert.Equal(t, testData.Humidity, *fields.Humidity)
 	assert.Equal(t, testData.Pressure, *fields.Pressure)
 	assert.Equal(t, testData.DewPoint, *fields.DewPoint)
+	assert.Equal(t, testData.WetBulb, *fields.WetBulb)
 	assert.Equal(t, 0.0, *fields.BatteryVoltage)
 	assert.Equal(t, 0, *fields.TxPower)
 	assert.Equal(t, 0, *fields.MeasurementNumber)
@@ -87,6 +92,7 @@ func TestNonZeroFields(t *testing.T) {
 	require.NotNil(t, fields.Temperature)
 	require.NotNil(t, fields.Humidity)
 	require.NotNil(t, fields.DewPoint)
+	require.NotNil(t, fields.WetBulb)
 	require.NotNil(t, fields.Pressure)
 	assert.Equal(t, testData.Timestamp, fields.Timestamp)
 	assert.Equal(t, testData.Addr, *fields.Addr)
@@ -95,6 +101,7 @@ func TestNonZeroFields(t *testing.T) {
 	assert.Equal(t, testData.Humidity, *fields.Humidity)
 	assert.Equal(t, testData.Pressure, *fields.Pressure)
 	assert.Equal(t, testData.DewPoint, *fields.DewPoint)
+	assert.Equal(t, testData.WetBulb, *fields.WetBulb)
 	assert.Nil(t, fields.BatteryVoltage)
 	assert.Nil(t, fields.TxPower)
 	assert.Nil(t, fields.MeasurementNumber)
