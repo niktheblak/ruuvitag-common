@@ -124,6 +124,9 @@ func (q *QueryBuilder) Collect(res Scanner, columns []string) (sensor.Fields, er
 		case q.Columns["dew_point"]:
 			d.DewPoint = sensor.ZeroFloat64Pointer()
 			pointers[i] = d.DewPoint
+		case q.Columns["wet_bulb"]:
+			d.WetBulb = sensor.ZeroFloat64Pointer()
+			pointers[i] = d.WetBulb
 		default:
 			return d, fmt.Errorf("unknown column: %s", column)
 		}
