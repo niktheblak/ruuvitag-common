@@ -9,9 +9,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-var (
-	passwordRegexp = regexp.MustCompile(`password=\S+\s`)
-)
+var passwordRegexp = regexp.MustCompile(`password=\S+\s`)
 
 // RemovePassword removes password from a psqlInfo style string
 func RemovePassword(connString string) string {
