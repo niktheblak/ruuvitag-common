@@ -6,7 +6,7 @@ toolchain go1.25.0
 
 require (
 	github.com/spf13/cast v1.9.2
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
