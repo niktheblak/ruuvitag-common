@@ -59,7 +59,7 @@ func TestCreateConnString(t *testing.T) {
 func TestDefaultBuildInsertQuery(t *testing.T) {
 	q, err := BuildInsertQuery("ruuvitag", sensor.DefaultColumnMap)
 	require.NoError(t, err)
-	assert.Equal(t, `INSERT INTO ruuvitag(time,mac,name,temperature,humidity,pressure,acceleration_x,acceleration_y,acceleration_z,movement_counter,measurement_number,dew_point,battery_voltage,tx_power,wet_bulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`, q)
+	assert.Equal(t, `INSERT INTO ruuvitag(time,mac,name,temperature,humidity,pressure,acceleration_x,acceleration_y,acceleration_z,movement_counter,measurement_number,dew_point,battery_voltage,tx_power,wet_bulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT (time, mac) DO NOTHING`, q)
 }
 
 func TestBuildInsertQuery(t *testing.T) {
@@ -81,7 +81,7 @@ func TestBuildInsertQuery(t *testing.T) {
 	}
 	q, err := BuildInsertQuery("ruuvitag", columns)
 	require.NoError(t, err)
-	assert.Equal(t, `INSERT INTO ruuvitag(ts,addr,roomName,temperature,humidity,pressure,accX,accY,accZ,movementCounter,measurementNumber,dewPoint,batteryVoltage,wetBulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`, q)
+	assert.Equal(t, `INSERT INTO ruuvitag(ts,addr,roomName,temperature,humidity,pressure,accX,accY,accZ,movementCounter,measurementNumber,dewPoint,batteryVoltage,wetBulb) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) ON CONFLICT (ts, addr) DO NOTHING`, q)
 }
 
 func TestDefaultBuildQueryArguments(t *testing.T) {

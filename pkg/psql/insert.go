@@ -37,7 +37,7 @@ func BuildInsertQuery(table string, columns map[string]string) (string, error) {
 		placeholders = append(placeholders, fmt.Sprintf("$%d", i))
 	}
 	queryBuilder.WriteString(strings.Join(placeholders, ","))
-	queryBuilder.WriteString(")")
+	queryBuilder.WriteString(fmt.Sprintf(") ON CONFLICT (%s, %s) DO NOTHING", columns["time"], columns["mac"]))
 	return queryBuilder.String(), nil
 }
 
