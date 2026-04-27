@@ -1,11 +1,11 @@
 module github.com/niktheblak/ruuvitag-common
 
-go 1.23
+go 1.26
 
 toolchain go1.25.0
 
 require (
-	github.com/spf13/cast v1.9.2
+	github.com/spf13/cast v1.10.0
 	github.com/stretchr/testify v1.11.1
 )
 
