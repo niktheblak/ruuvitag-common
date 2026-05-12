@@ -2,7 +2,7 @@ module github.com/niktheblak/ruuvitag-common
 
 go 1.26
 
-toolchain go1.25.0
+toolchain go1.26.3
 
 require (
 	github.com/spf13/cast v1.10.0
